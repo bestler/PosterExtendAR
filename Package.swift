@@ -10,7 +10,7 @@ import AppleProductTypes
 let package = Package(
     name: "PosterExtendAR",
     platforms: [
-        .iOS("15.2")
+        .iOS("16.0")
     ],
     products: [
         .iOSApplication(
@@ -31,6 +31,9 @@ let package = Package(
                 .landscapeRight,
                 .landscapeLeft,
                 .portraitUpsideDown(.when(deviceFamilies: [.pad]))
+            ],
+            capabilities: [
+                .camera(purposeString: "Displaying AR content requires the usage of the camera")
             ]
         )
     ],
