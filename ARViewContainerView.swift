@@ -56,10 +56,11 @@ struct ARViewContainer: UIViewRepresentable {
         func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
             for anchor in anchors {
                    if let myAnchor = anchor as? ARImageAnchor {
-                        let imageAnchor = AnchorEntity(anchor: myAnchor)
+                       let imageAnchor = AnchorEntity(.anchor(identifier: myAnchor.identifier))
+                       //imageAnchor.anchor = myAnchor
+                        //let imageAnchor = AnchorEntity(anchor: myAnchor)
                         let entity = ModelEntity(mesh: .generateBox(size: 0.1))
                         entity.setParent(imageAnchor)
-                       //imageAnchor.addChild(entity)
                         parent.scene.addAnchor(imageAnchor)
                        print("Added anchor")
                    }
