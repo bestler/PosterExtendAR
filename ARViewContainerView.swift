@@ -13,26 +13,24 @@ import Foundation
 struct ARViewContainer: UIViewRepresentable {
 
     var arView = ARView(frame: .zero)
-
+    var configuration = ARWorldTrackingConfiguration()
 
     func makeUIView(context: Context) -> ARView {
 
         arView.session.delegate = context.coordinator
 
-        // Create reference
-        let myImage = UIImage(named: "NCX-Poster")!
-        let refImage = ARReferenceImage(myImage.cgImage!, orientation: CGImagePropertyOrientation.up, physicalWidth: 0.5)
-
-
         //Create AR configuration
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.detectionImages = [refImage]
         configuration.maximumNumberOfTrackedImages = 1
 
         arView.session.run(configuration)
-
-
         return arView
+    }
+
+    func setRefImage(_ image : UIImage) {
+        if let cgImage = image.cgImage {
+            let refImage = ARReferenceImage(cgImage, orientation: CGImagePropertyOrientation.up, physicalWidth: 0.5)
+            configuration.detectionImages.insert(refImage)
+        }
     }
 
 
@@ -48,26 +46,20 @@ struct ARViewContainer: UIViewRepresentable {
 
         var parent: ARView
 
-
         init(_ parent :ARView) {
             self.parent = parent
         }
 
         func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
             for anchor in anchors {
-                   if let myAnchor = anchor as? ARImageAnchor {
-                       let imageAnchor = AnchorEntity(.anchor(identifier: myAnchor.identifier))
-                       //imageAnchor.anchor = myAnchor
-                        //let imageAnchor = AnchorEntity(anchor: myAnchor)
-                        let entity = ModelEntity(mesh: .generateBox(size: 0.1))
-                        entity.setParent(imageAnchor)
-                        parent.scene.addAnchor(imageAnchor)
-                       print("Added anchor")
-                   }
+                if let myAnchor = anchor as? ARImageAnchor {
+                    let imageAnchor = AnchorEntity(.anchor(identifier: myAnchor.identifier))
+                    let entity = ModelEntity(mesh: .generateBox(size: 0.1))
+                    entity.setParent(imageAnchor)
+                    parent.scene.addAnchor(imageAnchor)
+                    print("Added anchor")
+                }
             }
         }
-
     }
-
-
 }
