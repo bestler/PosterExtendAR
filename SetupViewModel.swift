@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 class SetupViewModel: ObservableObject {
 
     @Published var anchorImage: Image?
@@ -16,12 +17,11 @@ class SetupViewModel: ObservableObject {
     let arExperience = ARViewContainer()
 
 
-    func loadImage() {
-        guard let inputAnchorImage = inputAnchorImage else {return}
-        anchorImage = Image(uiImage: inputAnchorImage)
-
-        //TODO: Make sure that it happens ansynchronously in the background
-        arExperience.setRefImage(inputAnchorImage)
+    func loadImage(_ image : UIImage?) {
+        guard let image = image else {return}
+        anchorImage = Image(uiImage: image)
+        DispatchQueue.global(qos: .userInitiated).async{
+            self.arExperience.setRefImage(image)
+        }
     }
-
 }

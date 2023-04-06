@@ -47,7 +47,6 @@ struct SetupView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showingARExperience.toggle()
-                        //arExperience.setRefImage(inputAnchorImage!)
                     } label: {
                         Text("Show in AR")
                         Text((Image(systemName: "play.fill")))
@@ -61,8 +60,8 @@ struct SetupView: View {
             .fullScreenCover(isPresented: $showingARExperience, content: {
                 setupVm.arExperience
             })
-            .onChange(of: setupVm.inputAnchorImage) { _ in
-                setupVm.loadImage()
+            .onChange(of: setupVm.inputAnchorImage) { newValue in
+                setupVm.loadImage(newValue)
         }
         }
     }

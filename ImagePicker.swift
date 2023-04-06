@@ -40,13 +40,20 @@ struct ImagePicker: UIViewControllerRepresentable {
 
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             picker.dismiss(animated: true)
-
+            var newImage : UIImage?
             guard let provider = results.first?.itemProvider else {return}
-
             if provider.canLoadObject(ofClass: UIImage.self){
                 provider.loadObject(ofClass: UIImage.self) { image, _ in
-                    self.parent.image = image as? UIImage
+                    newImage = image as? UIImage
+                    self.updateImage(newImage)
                 }
+            }
+        }
+
+        private func updateImage(_ newImage: UIImage?){
+            DispatchQueue.main.async {
+                print("Updateing UI")
+                self.parent.image = newImage
             }
         }
     }
