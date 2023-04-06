@@ -30,11 +30,36 @@ struct AddMediumView: View {
                 }
             }
             .buttonStyle(.bordered)
-            .popover(isPresented: $showingPopOver) {
-                Text("Test")
+            .sheet(isPresented: $showingPopOver) {
+                SelectMediumSheet()
         }
         }
     }
+}
+
+struct SelectMediumSheet: View {
+
+    @State private var selectedChoice = 0
+
+    private let options = ["Image", "Video", "Drawing"]
+
+    var body: some View {
+        NavigationStack {
+            Picker("Media Type", selection: $selectedChoice) {
+                ForEach(0 ..< options.count, id: \.self) { index in
+                    Text(options[index])
+                        .tag(index)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding()
+            .navigationTitle("Select Mediatype")
+            .navigationBarTitleDisplayMode(.inline)
+            Spacer()
+        }
+    }
+
+
 }
 
 struct AddMediumView_Previews: PreviewProvider {

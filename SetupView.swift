@@ -42,6 +42,11 @@ struct SetupView: View {
                 setupVm.loadImage(newValue)
         }
         }
+        #if DEBUG
+        .onAppear{
+            setupVm.loadImage(UIImage(named: "NCX-Poster"))
+        }
+        #endif
     }
 }
 
