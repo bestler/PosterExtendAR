@@ -11,9 +11,7 @@ struct SetupView: View {
 
     @StateObject private var setupVm = SetupViewModel()
 
-    @State private var showingImagePicker = false
     @State private var showingARExperience = false
-
 
     var body: some View {
         NavigationStack {
@@ -21,24 +19,7 @@ struct SetupView: View {
                 AddMediumView()
                 HStack() {
                     AddMediumView()
-                    VStack {
-                        if let anchorImage = setupVm.anchorImage {
-                            anchorImage
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxWidth: 300, maxHeight: 300)
-                        }
-                        Button("Select Anchor Image") {
-                            showingImagePicker.toggle()
-                        }
-                        .buttonStyle(.borderedProminent)
-                        VStack {
-                            Text("Select here an image (e.g. a poster) that exists in the real world.")
-                            Text("The different views will be arranged around it.")
-                        }
-                        .font(.caption)
-                        .padding(.trailing)
-                    }
+                    AnchorImageView(setupVm: setupVm)
                     AddMediumView()
                 }
                 AddMediumView()
@@ -54,9 +35,6 @@ struct SetupView: View {
                 }
             }
             .navigationTitle("PosterExtendAR")
-            .sheet(isPresented: $showingImagePicker) {
-                ImagePicker(image: $setupVm.inputAnchorImage)
-            }
             .fullScreenCover(isPresented: $showingARExperience, content: {
                 setupVm.arExperience
             })
@@ -70,16 +48,39 @@ struct SetupView: View {
 
 struct AnchorImageView: View {
 
-    @Binding var anchorImage: Image?
-
-    @State private var inputAnchorImage: UIImage?
+    @ObservedObject var setupVm : SetupViewModel
 
     @State private var showingImagePicker = false
 
     var body: some View {
-        Text("Test")
+        VStack {
+            if let anchorImage = setupVm.anchorImage {
+                anchorImage
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 500, maxHeight: 500)
+                    .border(.black)
+                    .padding()
+            }else {
+                VStack {
+                    Button("Select Anchor Image") {
+                        showingImagePicker.toggle()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    VStack {
+                        Text("Select here an image (e.g. a poster) that exists in the real world.")
+                        Text("The different views will be arranged around it.")
+                    }
+                    .font(.caption)
+                    .padding(.trailing)
+                }
+                .padding(40)
+            }
+        }
+        .sheet(isPresented: $showingImagePicker) {
+            ImagePicker(image: $setupVm.inputAnchorImage)
+        }
     }
-
 }
 
 

@@ -15,7 +15,6 @@ struct AddMediumView: View {
 
     var body: some View {
         VStack {
-            Spacer()
             VStack {
                 /*
                 previewImage
@@ -34,7 +33,6 @@ struct AddMediumView: View {
             .popover(isPresented: $showingPopOver) {
                 Text("Test")
         }
-        Spacer()
         }
     }
 }

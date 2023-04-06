@@ -52,7 +52,6 @@ struct ImagePicker: UIViewControllerRepresentable {
 
         private func updateImage(_ newImage: UIImage?){
             DispatchQueue.main.async {
-                print("Updateing UI")
                 self.parent.image = newImage
             }
         }

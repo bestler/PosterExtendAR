@@ -29,10 +29,9 @@ struct ARViewContainer: UIViewRepresentable {
     func setRefImage(_ image : UIImage) {
         if let cgImage = image.cgImage {
             let refImage = ARReferenceImage(cgImage, orientation: CGImagePropertyOrientation.up, physicalWidth: 0.5)
-            configuration.detectionImages.insert(refImage)
+            configuration.detectionImages = [refImage]
         }
     }
-
 
     func updateUIView(_ uiView: ARView, context: Context) {
 
