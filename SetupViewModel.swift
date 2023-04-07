@@ -13,15 +13,19 @@ class SetupViewModel: ObservableObject {
 
     @Published var anchorImage: Image?
     @Published var inputAnchorImage: UIImage?
+    @Published var videoURL: URL? {
+        didSet {
+            arExperience.videoURL = videoURL
+        }
+    }
 
-    let arExperience = ARViewContainer()
+    var arExperience = ARViewContainer()
 
 
     func loadImage(_ image : UIImage?) {
         guard let image = image else {return}
         anchorImage = Image(uiImage: image)
-        DispatchQueue.global(qos: .userInitiated).async{
-            self.arExperience.setRefImage(image)
-        }
+        self.arExperience.setRefImage(image)
     }
+
 }

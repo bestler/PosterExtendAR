@@ -19,7 +19,7 @@ struct SetupView: View {
                 AddMediumView()
                 HStack() {
                     AddMediumView()
-                    AnchorImageView(setupVm: setupVm)
+                    AnchorImageView()
                     AddMediumView()
                 }
                 AddMediumView()
@@ -42,9 +42,10 @@ struct SetupView: View {
                 setupVm.loadImage(newValue)
         }
         }
+        .environmentObject(setupVm)
         #if DEBUG
         .onAppear{
-            setupVm.loadImage(UIImage(named: "NCX-Poster"))
+            setupVm.loadImage(UIImage(named: "London_Tower"))
         }
         #endif
     }
@@ -53,7 +54,7 @@ struct SetupView: View {
 
 struct AnchorImageView: View {
 
-    @ObservedObject var setupVm : SetupViewModel
+    @EnvironmentObject var setupVm : SetupViewModel
 
     @State private var showingImagePicker = false
 

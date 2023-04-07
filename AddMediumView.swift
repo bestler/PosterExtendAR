@@ -39,6 +39,7 @@ struct AddMediumView: View {
 
 struct SelectMediumSheet: View {
 
+
     @State private var selectedChoice = 0
 
     private let options = ["Image", "Video", "Drawing"]
@@ -53,13 +54,38 @@ struct SelectMediumSheet: View {
             }
             .pickerStyle(.segmented)
             .padding()
+            VStack {
+                if selectedChoice == 1 {
+                    VideoView()
+                }
+            }
             .navigationTitle("Select Mediatype")
             .navigationBarTitleDisplayMode(.inline)
             Spacer()
         }
     }
+}
 
+struct VideoView: View {
 
+    @EnvironmentObject var setupVm : SetupViewModel
+
+    @State private var showingPicker = false
+    //@State private var videoURL : URL?
+
+    var body: some View {
+        VStack {
+            Text(setupVm.videoURL?.absoluteString ?? "")
+            Button {
+                showingPicker.toggle()
+            }label: {
+                Text("Select Video")
+            }
+            .sheet(isPresented: $showingPicker) {
+                VideoPicker(url: $setupVm.videoURL)
+            }
+        }
+    }
 }
 
 struct AddMediumView_Previews: PreviewProvider {
