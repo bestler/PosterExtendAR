@@ -14,6 +14,7 @@ import PhotosUI
 struct VideoPicker: UIViewControllerRepresentable {
 
     @Binding var url: URL?
+    @Binding var progress: Progress?
 
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var config = PHPickerConfiguration()
@@ -41,7 +42,7 @@ struct VideoPicker: UIViewControllerRepresentable {
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             picker.dismiss(animated: true)
             guard let provider = results.first?.itemProvider else {return}
-            provider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier, completionHandler: { url, _ in
+            parent.progress = provider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier, completionHandler: { url, _ in
                 guard let url = url else {return}
                 let fileName = "\(Int(Date().timeIntervalSince1970)).\(url.pathExtension)"
                 let newURL = FileManager.default.temporaryDirectory.appending(path: fileName)

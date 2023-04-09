@@ -11,21 +11,26 @@ import SwiftUI
 @MainActor
 class SetupViewModel: ObservableObject {
 
-    @Published var anchorImage: Image?
-    @Published var inputAnchorImage: UIImage?
-    @Published var videoURL: URL? {
+    @Published var showingARExperience: Bool = false {
         didSet {
-            arExperience.videoURL = videoURL
+            //Reset experience if you close the ARView
+            if showingARExperience == false {
+                self.arExperience = ARViewContainer()
+                if let anchorImage{
+                    self.arExperience.setRefImage(anchorImage)
+                }
+                self.arExperience.media = self.media
+
+            }
         }
     }
+    @Published var anchorImage: UIImage?
 
-    var arExperience = ARViewContainer()
-
-
-    func loadImage(_ image : UIImage?) {
-        guard let image = image else {return}
-        anchorImage = Image(uiImage: image)
-        self.arExperience.setRefImage(image)
+    @Published var media : [ContentPosition:ARVideoMedium?] = [ContentPosition:ARVideoMedium?](){
+        didSet{
+            arExperience.media = media
+        }
     }
+    var arExperience = ARViewContainer()
 
 }

@@ -14,17 +14,32 @@ struct ARViewContainer: UIViewRepresentable {
 
     var arView = ARView(frame: .zero)
     var configuration = ARWorldTrackingConfiguration()
-    var videoURL : URL?
+    var media : [ContentPosition:ARVideoMedium?] = [ContentPosition:ARVideoMedium?]()
+    var currentAnchor : AnchorEntity?
 
     func makeUIView(context: Context) -> ARView {
 
         arView.session.delegate = context.coordinator
-
         //Create AR configuration
         configuration.maximumNumberOfTrackedImages = 1
-
         arView.session.run(configuration)
         return arView
+    }
+
+    func updateUIView(_ uiView: ARView, context: Context) {
+    }
+
+    func stopPlayback(){
+        if let anchor = arView.scene.anchors.first {
+            for position in ContentPosition.allCases {
+                let entityTop = anchor.findEntity(named: position.rawValue)
+                if let modelEntity = (entityTop as? ModelEntity) {
+                    if let material = (modelEntity.model?.materials.first as? VideoMaterial){
+                        material.avPlayer?.pause()
+                    }
+                }
+            }
+        }
     }
 
     func setRefImage(_ image : UIImage) {
@@ -33,10 +48,6 @@ struct ARViewContainer: UIViewRepresentable {
             let refImage = ARReferenceImage(cgImage, orientation: CGImagePropertyOrientation(image.imageOrientation), physicalWidth: 0.4)
             configuration.detectionImages = [refImage]
         }
-    }
-
-    func updateUIView(_ uiView: ARView, context: Context) {
-
     }
 
     func makeCoordinator() -> Coordinator {
@@ -51,37 +62,51 @@ struct ARViewContainer: UIViewRepresentable {
             self.parent = parent
         }
 
+
         func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
             for anchor in anchors {
                 if let myAnchor = anchor as? ARImageAnchor {
-                    let imageAnchor = AnchorEntity(.anchor(identifier: myAnchor.identifier))
-                    //let entity = ModelEntity(mesh: .generateBox(size: 0.1))
-                    let entity = ARUtils.createVideoEntity(videoURL: parent.videoURL)
-                    entity.setPosition(simd_float3(0, 0, -0.4), relativeTo: imageAnchor)
-                    entity.setParent(imageAnchor)
+                    var imageAnchor = AnchorEntity(.anchor(identifier: myAnchor.identifier))
+                    parent.currentAnchor = imageAnchor
+                    let anchorWidth = Float(myAnchor.referenceImage.physicalSize.width)
+                    let anchorHeight = Float(myAnchor.referenceImage.physicalSize.height)
+                    imageAnchor = attachMedia(imageAnchor: imageAnchor, anchorWidth: anchorWidth, anchorHeigt: anchorHeight)
                     parent.arView.scene.addAnchor(imageAnchor)
                     print("Added anchor")
                 }
             }
         }
-    }
-}
 
-class ARUtils {
-    static func createVideoEntity(videoURL : URL?) -> ModelEntity {
-        let box = ModelEntity(mesh: .generateBox(size: simd_make_float3(0.5, 0.02, 0.5)))
-        if let videoURL {
-            let asset = AVURLAsset(url: videoURL)
-            let playerItem = AVPlayerItem(asset: asset)
-            let player = AVPlayer(playerItem: playerItem)
-            let videoMaterial = VideoMaterial(avPlayer: player)
-            box.model?.materials = [videoMaterial]
-            player.play()
+        func attachMedia(imageAnchor: AnchorEntity, anchorWidth: Float, anchorHeigt: Float) -> AnchorEntity {
+            for (position, medium) in parent.media {
+                if let medium {
+                    let entity = medium.createModelEntity()
+                    var offsetForAlignment: Float = 0.0
+                    switch position {
+                    case .top:
+                        offsetForAlignment = anchorHeigt/2 + medium.height/2 + 0.02 //2cm padding
+                        entity.setPosition(simd_float3(0,0, -offsetForAlignment), relativeTo: imageAnchor)
+                    case .bottom:
+                        offsetForAlignment = anchorHeigt/2 + medium.height/2 + 0.02
+                        entity.setPosition(simd_float3(0,0, offsetForAlignment), relativeTo: imageAnchor)
+                    case .left:
+                        offsetForAlignment = anchorWidth/2 + medium.width/2 + 0.02
+                        entity.setPosition(simd_float3(-offsetForAlignment,0,0), relativeTo: imageAnchor)
+                    case .right:
+                        offsetForAlignment = anchorWidth/2 + medium.width/2 + 0.02
+                        entity.setPosition(simd_float3(offsetForAlignment,0,0), relativeTo: imageAnchor)
+                    }
+                    entity.name = position.rawValue
+                    if medium.isPortraitMode {
+                        entity.transform.rotation = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: SIMD3(x: 0, y: 1, z: 0))
+                    }
+                    entity.setParent(imageAnchor)
+                }
+            }
+            return imageAnchor
         }
-        return box
     }
 }
-
 
 extension CGImagePropertyOrientation {
     init(_ uiOrientation: UIImage.Orientation) {
