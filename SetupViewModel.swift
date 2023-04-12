@@ -26,7 +26,7 @@ class SetupViewModel: ObservableObject {
     }
     @Published var anchorImage: UIImage?
 
-    @Published var media : [ContentPosition:ARVideoMedium?] = [ContentPosition:ARVideoMedium?](){
+    @Published var media : [ContentPosition:ARMedium?] = [ContentPosition:ARMedium?](){
         didSet{
             arExperience.media = media
         }

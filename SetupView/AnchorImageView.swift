@@ -11,7 +11,9 @@ struct AnchorImageView: View {
 
     @EnvironmentObject var setupVm : SetupViewModel
 
-    @State private var showingImagePicker = false
+    @State private var progress: Progress?
+
+    @State private var showingAnchorImagePicker = false
     @State private var inputAnchorImage: UIImage?
 
     var body: some View {
@@ -25,7 +27,7 @@ struct AnchorImageView: View {
             }else {
                 VStack {
                     Button("Select Anchor Image") {
-                        showingImagePicker.toggle()
+                        showingAnchorImagePicker.toggle()
                     }
                     .buttonStyle(.borderedProminent)
                     VStack {
@@ -38,8 +40,8 @@ struct AnchorImageView: View {
                 .padding(40)
             }
         }
-        .sheet(isPresented: $showingImagePicker) {
-            ImagePicker(image: $inputAnchorImage)
+        .sheet(isPresented: $showingAnchorImagePicker) {
+            ImagePicker(image: $inputAnchorImage, progress: $progress, showingPicker: $showingAnchorImagePicker)
         }
         .onChange(of: inputAnchorImage) { newValue in
             loadImage(newValue)

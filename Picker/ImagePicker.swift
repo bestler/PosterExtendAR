@@ -14,11 +14,15 @@ import PhotosUI
 struct ImagePicker: UIViewControllerRepresentable {
 
     @Binding var image: UIImage?
+    @Binding var progress: Progress?
+    @Binding var showingPicker: Bool
 
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var config = PHPickerConfiguration()
         config.filter = .images
+        config.selectionLimit = 1
         let picker = PHPickerViewController(configuration: config)
+        picker.modalPresentationStyle = .overCurrentContext
         picker.delegate = context.coordinator
         return picker
     }
@@ -39,17 +43,19 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
 
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            picker.dismiss(animated: true)
+
             var newImage : UIImage?
             guard let provider = results.first?.itemProvider else {return}
             if provider.canLoadObject(ofClass: UIImage.self){
-                provider.loadObject(ofClass: UIImage.self) { image, _ in
+                parent.progress = provider.loadObject(ofClass: UIImage.self) { image, _ in
                     newImage = image as? UIImage
                     self.updateImage(newImage)
                 }
             }
+            parent.showingPicker = false
         }
-
+        
+        
         private func updateImage(_ newImage: UIImage?){
             DispatchQueue.main.async {
                 self.parent.image = newImage

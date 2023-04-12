@@ -10,7 +10,7 @@ import RealityKit
 import AVFoundation
 import SwiftUI
 
-struct ARVideoMedium: Medium {
+struct ARVideoMedium: ARMedium {
 
     var position: ContentPosition
     var isPortraitMode: Bool = false

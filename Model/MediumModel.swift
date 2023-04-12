@@ -10,7 +10,7 @@ import RealityKit
 import AVFoundation
 import SwiftUI
 
-protocol Medium {
+protocol ARMedium {
 
     var position: ContentPosition { get set }
     var isPortraitMode: Bool {get set}
@@ -22,7 +22,7 @@ protocol Medium {
 }
 
 enum MediumType {
-    case video, image, text
+    case video, image
 }
 
 enum ContentPosition: String, CaseIterable {

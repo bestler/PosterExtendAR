@@ -88,20 +88,20 @@ struct AddVideoView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            Spacer()
-            .onChange(of: videoURL) { newURL in
-                if let newURL {
-                    print("New Url")
-                    medium = ARVideoMedium(position: .top, width: 0.45, height: 0.8)
-                    medium?.url = newURL
-                    let image = createPreview(url: newURL)
-                    if let image {
-                        print("Created Image sucessfully")
-                        previewImage = image
-                        medium?.previewImage = image
+                .onChange(of: videoURL) { newURL in
+                    if let newURL {
+                        print("New Url")
+                        medium = ARVideoMedium(position: .top, width: 0.45, height: 0.8)
+                        medium?.url = newURL
+                        let image = createPreview(url: newURL)
+                        if let image {
+                            print("Created Image sucessfully")
+                            previewImage = image
+                            medium?.previewImage = image
+                        }
                     }
                 }
-        }
+                .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
         }
     }
 
@@ -122,14 +122,14 @@ struct AddVideoView: View {
                 Text("General Settings")
             }
             Section {
-                TextField("Width", value: $width, formatter: formatter, prompt: Text("Size in meter"))
+                TextField("Width", value: $width, formatter: formatter, prompt: Text("Size in meters"))
                     .keyboardType(.decimalPad)
             } header: {
                 Text("Width (in meters)")
             }
             if !keepAspectRatio {
                 Section {
-                    TextField("Height", value: $heigt, formatter: formatter, prompt: Text("Size"))
+                    TextField("Height", value: $heigt, formatter: formatter, prompt: Text("Size in meters"))
                         .keyboardType(.decimalPad)
                 } header: {
                     Text("Height (in meters)")
@@ -179,8 +179,12 @@ struct AddVideoView: View {
 }
 
 struct VideoView_Previews: PreviewProvider {
+
+    static let envObject = SetupViewModel()
+
     static var previews: some View {
         AddVideoView(position: .top)
+            .environmentObject(envObject)
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

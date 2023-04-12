@@ -13,7 +13,8 @@ struct SelectMenuView: View {
 
     @EnvironmentObject var setupVm: SetupViewModel
 
-    @State private var showingSheet = false
+    @State private var showingImageSheet = false
+    @State private var showingVideoSheet = false
 
     var body: some View {
 
@@ -28,24 +29,38 @@ struct SelectMenuView: View {
             }
             Menu(){
                 Button {
-                    showingSheet.toggle()
+                    showingVideoSheet = true
                 } label: {
                     Label("Video", systemImage: "play.rectangle")
+                }
+                Button {
+                    showingImageSheet = true
+                } label: {
+                    Label("Image", systemImage: "photo")
                 }
             } label: {
                 Text(Image(systemName: "plus.circle"))
                 Text("Add new medium")
             }
             .buttonStyle(.bordered)
-            .sheet(isPresented: $showingSheet) {
+            .sheet(isPresented: $showingImageSheet, content: {
+                AddImageView(position: position)
+            })
+            .sheet(isPresented: $showingVideoSheet) {
                 AddVideoView(position: position)
+            }
         }
-        }
+
     }
+
 }
 
 struct SelectMenuView_Previews: PreviewProvider {
+
+    static let envObject = SetupViewModel()
+
     static var previews: some View {
         SelectMenuView(position: .top)
+            .environmentObject(envObject)
     }
 }

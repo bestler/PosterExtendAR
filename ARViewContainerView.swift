@@ -14,7 +14,7 @@ struct ARViewContainer: UIViewRepresentable {
 
     var arView = ARView(frame: .zero)
     var configuration = ARWorldTrackingConfiguration()
-    var media : [ContentPosition:ARVideoMedium?] = [ContentPosition:ARVideoMedium?]()
+    var media : [ContentPosition:ARMedium?] = [ContentPosition:ARMedium?]()
     var currentAnchor : AnchorEntity?
 
     func makeUIView(context: Context) -> ARView {
