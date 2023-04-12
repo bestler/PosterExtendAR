@@ -24,7 +24,12 @@ class SetupViewModel: ObservableObject {
             }
         }
     }
-    @Published var anchorImage: UIImage?
+    @Published var anchorImage: UIImage? {
+        didSet {
+            guard let anchorImage else {return}
+            arExperience.setRefImage(anchorImage)
+        }
+    }
 
     @Published var media : [ContentPosition:ARMedium?] = [ContentPosition:ARMedium?](){
         didSet{

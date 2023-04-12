@@ -41,12 +41,8 @@ struct AnchorImageView: View {
             }
         }
         .sheet(isPresented: $showingAnchorImagePicker) {
-            ImagePicker(image: $inputAnchorImage, progress: $progress, showingPicker: $showingAnchorImagePicker)
+            AddAnchorView()
         }
-        .onChange(of: inputAnchorImage) { newValue in
-            loadImage(newValue)
-        }
-
         /*
          #if DEBUG
          .onAppear{
