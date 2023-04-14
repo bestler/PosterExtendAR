@@ -26,33 +26,32 @@ struct SelectMenuView: View {
                         .scaledToFit()
                         .frame(width: 100, height: 100)
                 }
-            }
-            Menu(){
-                Button {
-                    showingVideoSheet = true
+            } else {
+                Menu(){
+                    Button {
+                        showingVideoSheet = true
+                    } label: {
+                        Label("Video", systemImage: "play.rectangle")
+                    }
+                    Button {
+                        showingImageSheet = true
+                    } label: {
+                        Label("Image", systemImage: "photo")
+                    }
                 } label: {
-                    Label("Video", systemImage: "play.rectangle")
+                    Text(Image(systemName: "plus.circle"))
+                    Text("Add new medium")
                 }
-                Button {
-                    showingImageSheet = true
-                } label: {
-                    Label("Image", systemImage: "photo")
+                .buttonStyle(.bordered)
+                .sheet(isPresented: $showingImageSheet, content: {
+                    AddImageView(position: position)
+                })
+                .sheet(isPresented: $showingVideoSheet) {
+                    AddVideoView(position: position)
                 }
-            } label: {
-                Text(Image(systemName: "plus.circle"))
-                Text("Add new medium")
-            }
-            .buttonStyle(.bordered)
-            .sheet(isPresented: $showingImageSheet, content: {
-                AddImageView(position: position)
-            })
-            .sheet(isPresented: $showingVideoSheet) {
-                AddVideoView(position: position)
             }
         }
-
     }
-
 }
 
 struct SelectMenuView_Previews: PreviewProvider {
