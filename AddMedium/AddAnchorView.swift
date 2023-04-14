@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ARKit
 
 struct AddAnchorView: View {
 
@@ -21,6 +22,7 @@ struct AddAnchorView: View {
 
     @State private var progress: Progress?
 
+    @State private var isError: Bool = false
     @State private var showingImagePicker: Bool = false
     @State private var previewImage: UIImage?
 
@@ -63,6 +65,12 @@ struct AddAnchorView: View {
                 }
                 SettingsForm()
             }
+            .alert("Image can't be used as an anchor. Please choose another one.", isPresented: $isError, actions: {
+                Button("OK") {
+                    setupVm.anchorImage = nil
+                    previewImage = nil
+                }
+            })
             .navigationTitle("Add Image")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction){
@@ -80,10 +88,22 @@ struct AddAnchorView: View {
             }
             .onChange(of: previewImage, perform: { newValue in
                 guard let newValue = newValue else {return}
+                validateImage(newValue)
                 previewImage = newValue
             })
             .navigationBarTitleDisplayMode(.inline)
             .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+        }
+    }
+
+    private func validateImage(_ image: UIImage) {
+        if let cgImage = image.cgImage {
+            let possibleRefImage = ARReferenceImage(cgImage, orientation: CGImagePropertyOrientation(image.imageOrientation), physicalWidth: 0.4)
+            possibleRefImage.validate { (error) in
+                if let error {
+                    isError = true
+                }
+            }
         }
     }
 

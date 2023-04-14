@@ -43,7 +43,6 @@ struct ARViewContainer: UIViewRepresentable {
     }
 
     func setRefImage(_ image : UIImage) {
-        print(image.imageOrientation.rawValue)
         if let cgImage = image.cgImage {
             let refImage = ARReferenceImage(cgImage, orientation: CGImagePropertyOrientation(image.imageOrientation), physicalWidth: 0.4)
             configuration.detectionImages = [refImage]
