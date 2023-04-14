@@ -45,6 +45,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
 
             var newImage : UIImage?
+            parent.showingPicker = false
             guard let provider = results.first?.itemProvider else {return}
             if provider.canLoadObject(ofClass: UIImage.self){
                 parent.progress = provider.loadObject(ofClass: UIImage.self) { image, _ in
@@ -52,7 +53,6 @@ struct ImagePicker: UIViewControllerRepresentable {
                     self.updateImage(newImage)
                 }
             }
-            parent.showingPicker = false
         }
         
         
