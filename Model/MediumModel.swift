@@ -12,6 +12,7 @@ import SwiftUI
 
 protocol ARMedium {
 
+    var id: UUID { get set }
     var position: ContentPosition { get set }
     var isPortraitMode: Bool {get set}
     var previewImage: UIImage? {get set}

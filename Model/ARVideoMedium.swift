@@ -12,6 +12,7 @@ import SwiftUI
 
 struct ARVideoMedium: ARMedium {
 
+    var id: UUID = UUID()
     var position: ContentPosition
     var isPortraitMode: Bool = false
     var playBackWithSound: Bool = true
