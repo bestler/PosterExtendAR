@@ -22,22 +22,25 @@ struct AnchorImageView: View {
                 Image(uiImage: anchorImage)
                     .resizable()
                     .scaledToFit()
-                    .frame(maxWidth: 500, maxHeight: 500)
+                    .border(.black)
+                    .frame(minWidth: 200, idealWidth: 400, maxWidth: 500)
                     .padding()
+                Label("Anchor", systemImage: "dot.squareshape.split.2x2")
+                    .labelStyle(CustomBackgroundLabelStyle(color: .pink))
             }else {
                 VStack {
                     Button("Select Anchor Image") {
                         showingAnchorImagePicker.toggle()
                     }
                     .buttonStyle(.borderedProminent)
-                    VStack {
-                        Text("Select here an image (e.g. a poster) that exists in the real world.")
-                        Text("The different views will be arranged around it.")
+                    VStack(alignment: .leading) {
+                        Text("1. Select here an image (e.g. a poster) that exists in the real world.")
+                        Text("2. Arrange different views around that central image to provide more informations.")
                     }
                     .font(.caption)
                     .padding(.trailing)
                 }
-                .padding(40)
+                //.padding(40)
             }
         }
         .sheet(isPresented: $showingAnchorImagePicker) {

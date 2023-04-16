@@ -17,14 +17,21 @@ struct SelectMenuView: View {
     @State private var showingVideoSheet = false
 
     var body: some View {
-
         VStack {
             if let medium = setupVm.media[position], medium != nil {
                 if let image = medium!.previewImage{
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 100)
+                        .cornerRadius(5)
+                        .frame(minWidth: 50, idealWidth: 100, maxWidth: 300)
+                    if medium is ARVideoMedium {
+                        Label("Video", systemImage: "play.rectangle")
+                            .labelStyle(CustomBackgroundLabelStyle(color: .mint))
+                    } else if medium is ARImageMedium {
+                        Label("Image", systemImage: "photo")
+                            .labelStyle(CustomBackgroundLabelStyle(color: .orange))
+                    }
                 }
             } else {
                 Menu(){
@@ -51,8 +58,25 @@ struct SelectMenuView: View {
                 }
             }
         }
+        .padding()
+    }
+
+}
+
+struct CustomBackgroundLabelStyle: LabelStyle {
+
+    let color: Color
+
+    func makeBody(configuration: Configuration) -> some View {
+        Label(configuration)
+            .padding(4)
+            .background(content: {
+                RoundedRectangle(cornerRadius: 5)
+                    .foregroundColor(color).opacity(0.2)
+            })
     }
 }
+
 
 struct SelectMenuView_Previews: PreviewProvider {
 

@@ -100,7 +100,7 @@ struct AddAnchorView: View {
         if let cgImage = image.cgImage {
             let possibleRefImage = ARReferenceImage(cgImage, orientation: CGImagePropertyOrientation(image.imageOrientation), physicalWidth: 0.4)
             possibleRefImage.validate { (error) in
-                if let error {
+                if error != nil {
                     isError = true
                 }
             }
