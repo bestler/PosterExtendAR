@@ -31,3 +31,19 @@ extension CGImagePropertyOrientation {
         }
     }
 }
+
+
+extension FileManager {
+    func clearTempDirectory() {
+        do {
+            let tempURL = self.temporaryDirectory
+            let temDirectory = try contentsOfDirectory(atPath: tempURL.path())
+            temDirectory.forEach({ file in
+                let fileURL = tempURL.appending(path: file, directoryHint: .notDirectory)
+                try! removeItem(atPath: fileURL.path())
+            })
+        } catch {
+            print(error)
+        }
+    }
+}
