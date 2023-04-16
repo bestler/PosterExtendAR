@@ -64,7 +64,7 @@ struct AddVideoView: View {
                         Text("Select Video")
                     }
                     .sheet(isPresented: $showingPicker) {
-                        VideoPicker(url: $videoURL, progress: $progress)
+                        VideoPicker(showingPicker: $showingPicker, url: $videoURL, progress: $progress)
                     }
                     .buttonStyle(.bordered)
                     .padding()

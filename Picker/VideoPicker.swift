@@ -13,6 +13,7 @@ import PhotosUI
 
 struct VideoPicker: UIViewControllerRepresentable {
 
+    @Binding var showingPicker: Bool
     @Binding var url: URL?
     @Binding var progress: Progress?
 
@@ -40,7 +41,7 @@ struct VideoPicker: UIViewControllerRepresentable {
         }
 
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            picker.dismiss(animated: true)
+            parent.showingPicker = false
             guard let provider = results.first?.itemProvider else {return}
             parent.progress = provider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier, completionHandler: { url, _ in
                 guard let url = url else {return}
