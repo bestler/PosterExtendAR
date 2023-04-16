@@ -23,6 +23,7 @@ struct ARViewContainer: UIViewRepresentable {
         //Create AR configuration
         configuration.maximumNumberOfTrackedImages = 1
         arView.session.run(configuration)
+        arView.enableTapGesture()
         return arView
     }
 
@@ -40,6 +41,7 @@ struct ARViewContainer: UIViewRepresentable {
                 }
             }
         }
+        arView.session.pause()
     }
 
     func setRefImage(_ image : UIImage) {
@@ -99,10 +101,36 @@ struct ARViewContainer: UIViewRepresentable {
                     if medium.isPortraitMode {
                         entity.transform.rotation = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: SIMD3(x: 0, y: 1, z: 0))
                     }
+                    entity.generateCollisionShapes(recursive: true)
+                    // Make it resizable and movable
+                    //parent.arView.installGestures(for: entity)
                     entity.setParent(imageAnchor)
                 }
             }
             return imageAnchor
+        }
+    }
+}
+
+
+extension ARView {
+    func enableTapGesture() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.addGestureRecognizer(tapGestureRecognizer)
+    }
+
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
+        let tapLocation = recognizer.location(in: self)
+        if let entity = self.entity(at: tapLocation) as? ModelEntity {
+            if let material = (entity.model?.materials.first as? VideoMaterial){
+                if material.avPlayer?.timeControlStatus == .playing {
+                    material.avPlayer?.pause()
+                } else {
+                    material.avPlayer?.seek(to: .zero)
+                    material.avPlayer?.play()
+                }
+
+            }
         }
     }
 }

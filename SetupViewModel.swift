@@ -15,6 +15,7 @@ class SetupViewModel: ObservableObject {
         didSet {
             //Reset experience if you close the ARView
             if showingARExperience == false {
+                arExperience.arView.session.pause()
                 self.arExperience = ARViewContainer()
                 if let anchorImage{
                     self.arExperience.setRefImage(anchorImage)
