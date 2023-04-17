@@ -86,16 +86,16 @@ struct ARViewContainer: UIViewRepresentable {
                     switch position {
                     case .top:
                         offsetForAlignment = anchorHeigt/2 + medium.height/2 + 0.02 //2cm padding
-                        entity.setPosition(simd_float3(0,0, -offsetForAlignment), relativeTo: imageAnchor)
+                        entity.setPosition(simd_float3(0,0.001, -offsetForAlignment), relativeTo: imageAnchor)
                     case .bottom:
                         offsetForAlignment = anchorHeigt/2 + medium.height/2 + 0.02
-                        entity.setPosition(simd_float3(0,0, offsetForAlignment), relativeTo: imageAnchor)
+                        entity.setPosition(simd_float3(0,0.002, offsetForAlignment), relativeTo: imageAnchor)
                     case .left:
                         offsetForAlignment = anchorWidth/2 + medium.width/2 + 0.02
-                        entity.setPosition(simd_float3(-offsetForAlignment,0,0), relativeTo: imageAnchor)
+                        entity.setPosition(simd_float3(-offsetForAlignment,0.003,0), relativeTo: imageAnchor)
                     case .right:
                         offsetForAlignment = anchorWidth/2 + medium.width/2 + 0.02
-                        entity.setPosition(simd_float3(offsetForAlignment,0,0), relativeTo: imageAnchor)
+                        entity.setPosition(simd_float3(offsetForAlignment,0.004,0), relativeTo: imageAnchor)
                     }
                     entity.name = position.rawValue
                     if medium.isPortraitMode {
