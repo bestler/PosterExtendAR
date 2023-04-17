@@ -15,6 +15,7 @@ struct SelectMenuView: View {
 
     @State private var showingImageSheet = false
     @State private var showingVideoSheet = false
+    @State private var showingDrawing = false
 
     var body: some View {
         VStack {
@@ -45,6 +46,11 @@ struct SelectMenuView: View {
                     } label: {
                         Label("Image", systemImage: "photo")
                     }
+                    Button {
+                        showingDrawing = true
+                    } label: {
+                        Label("Drawing", systemImage: "pencil.and.ruler")
+                    }
                 } label: {
                     Text(Image(systemName: "plus.circle"))
                     Text("Add new medium")
@@ -55,6 +61,9 @@ struct SelectMenuView: View {
                 })
                 .sheet(isPresented: $showingVideoSheet) {
                     AddVideoView(position: position)
+                }
+                .fullScreenCover(isPresented: $showingDrawing) {
+                    DrawingView()
                 }
             }
         }
