@@ -33,7 +33,7 @@ struct SetupView: View {
                     }
                 }
             }
-            .navigationTitle("PosterExtendAR")
+            .navigationTitle("Create an AR Experience ✨")
             .fullScreenCover(isPresented: $setupVm.showingARExperience, content: {
                 ZStack(alignment: .topTrailing){
                     setupVm.arExperience
