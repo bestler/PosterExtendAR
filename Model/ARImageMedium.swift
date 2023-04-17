@@ -27,6 +27,8 @@ struct ARImageMedium: ARMedium {
 
     var height: Float = 0.45
 
+    var isResizable: Bool = false
+
     func saveTextureToFiles() {
         let tempFileUrl = FileManager.default.temporaryDirectory.appendingPathComponent("img-\(id.uuidString).jpeg")
         if let previewImage {

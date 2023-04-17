@@ -102,8 +102,9 @@ struct ARViewContainer: UIViewRepresentable {
                         entity.transform.rotation = simd_quatf(angle: GLKMathDegreesToRadians(-90), axis: SIMD3(x: 0, y: 1, z: 0))
                     }
                     entity.generateCollisionShapes(recursive: true)
-                    // Make it resizable and movable
-                    //parent.arView.installGestures(for: entity)
+                    if medium.isResizable {
+                        parent.arView.installGestures(for: entity)
+                    }
                     entity.setParent(imageAnchor)
                 }
             }

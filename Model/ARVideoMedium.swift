@@ -21,6 +21,7 @@ struct ARVideoMedium: ARMedium {
     var height: Float
     var url: URL?
     var previewImage: UIImage?
+    var isResizable: Bool = false
 
     func createModelEntity() -> ModelEntity {
         var box = ModelEntity()

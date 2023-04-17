@@ -32,6 +32,7 @@ struct AddVideoView: View {
     @State private var keepAspectRatio: Bool = true
     @State private var isSound: Bool = true
     @State private var autoPlay: Bool = true
+    @State private var isResizable: Bool = false
 
     private var saveDisabled: Bool {
         if previewImage != nil, videoURL != nil {
@@ -56,7 +57,6 @@ struct AddVideoView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200, height: 200)
-                    Text(videoURL?.absoluteString ?? "")
                 } else {
                     Button {
                         showingPicker.toggle()
@@ -108,6 +108,9 @@ struct AddVideoView: View {
     @ViewBuilder private func SettingsForm() -> some View {
         Form {
             Section {
+                Toggle(isOn: $isResizable) {
+                    Text("Allow resizing, repositioning and scaling in AR")
+                }
                 Toggle(isOn: $autoPlay) {
                     Text("Autoplay video")
                 }
@@ -117,7 +120,6 @@ struct AddVideoView: View {
                 Toggle(isOn: $keepAspectRatio) {
                     Text("Keep aspect ratio")
                 }
-
             } header: {
                 Text("General Settings")
             }
@@ -143,6 +145,7 @@ struct AddVideoView: View {
         updateSizeAccordingToScale()
         medium?.autoPlayEnabled = autoPlay
         medium?.playBackWithSound = isSound
+        medium?.isResizable = isResizable
     }
 
     private func updateSizeAccordingToScale(){

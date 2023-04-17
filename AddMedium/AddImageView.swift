@@ -32,7 +32,7 @@ struct AddImageView: View {
     @State private var keepAspectRatio: Bool = true
     @State private var customSize: Bool = false
     @State private var choosenSize: PageSize = .DINA4
-
+    @State private var isResizable: Bool = false
 
     private var saveDisabled: Bool {
         if previewImage == nil {
@@ -102,6 +102,9 @@ struct AddImageView: View {
     @ViewBuilder private func SettingsForm() -> some View {
         Form {
             Section {
+                Toggle(isOn: $isResizable) {
+                    Text("Allow resizing, repositioning and scaling in AR")
+                }
                 Toggle(isOn: $keepAspectRatio) {
                     Text("Keep aspect ratio")
                 }
@@ -142,6 +145,7 @@ struct AddImageView: View {
     }
 
     private func updateSize() {
+        medium.isResizable = isResizable
         if keepAspectRatio {
             guard let image = medium.previewImage else {return}
 

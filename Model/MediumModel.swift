@@ -18,6 +18,7 @@ protocol ARMedium {
     var previewImage: UIImage? {get set}
     var width: Float { get set }
     var height: Float { get set }
+    var isResizable: Bool { get set }
 
     func createModelEntity() -> ModelEntity
 }
