@@ -24,6 +24,7 @@ struct AddAnchorView: View {
 
     @State private var isError: Bool = false
     @State private var showingImagePicker: Bool = false
+    @State private var showingScanner: Bool = false
     @State private var previewImage: UIImage?
 
     @State private var width: Double = 0.8
@@ -52,10 +53,21 @@ struct AddAnchorView: View {
                         .scaledToFit()
                         .frame(width: 200, height: 200)
                 } else {
-                    Button {
-                        showingImagePicker.toggle()
-                    }label: {
-                        Text("Select Image")
+                    VStack {
+                        Button {
+                            showingImagePicker.toggle()
+                        }label: {
+                            Text("Select Image from Library")
+                        }
+                        Text("or")
+                        Button {
+                            showingScanner.toggle()
+                        }label: {
+                            Text("Scan")
+                        }
+                    }
+                    .fullScreenCover(isPresented: $showingScanner) {
+                        Scanner(image: $previewImage, showingScanner: $showingScanner)
                     }
                     .sheet(isPresented: $showingImagePicker) {
                         ImagePicker(image: $previewImage, progress: $progress, showingPicker: $showingImagePicker)
