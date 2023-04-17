@@ -1,18 +1,19 @@
 //
-//  SwiftUIView.swift
+//  AddDrawingView.swift
 //  
 //
-//  Created by Simon Bestler on 09.04.23.
+//  Created by Simon Bestler on 17.04.23.
 //
 
 import SwiftUI
 
-struct AddImageView: View {
+struct AddDrawingView: View {
 
     @EnvironmentObject var setupVm : SetupViewModel
     @Environment(\.dismiss) var dismiss
 
     let position: ContentPosition
+    @Binding var previewImage: UIImage?
 
     let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -21,12 +22,6 @@ struct AddImageView: View {
     }()
 
     @State private var medium = ARImageMedium(position: .top)
-
-    @State private var progress: Progress?
-
-    @State private var showingImagePicker: Bool = false
-    @State private var previewImage: UIImage?
-
     @State private var width: Double = 0.8
     @State private var height: Double = 0.45
     @State private var keepAspectRatio: Bool = true
@@ -45,32 +40,19 @@ struct AddImageView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if let progress, !progress.isFinished{
-                    ProgressView("Loading Image...")
-                }
                 if let previewImage {
                     Image(uiImage: previewImage)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200, height: 200)
-                } else {
-                    Button {
-                        showingImagePicker.toggle()
-                    }label: {
-                        Text("Select Image")
-                    }
-                    .sheet(isPresented: $showingImagePicker) {
-                        ImagePicker(image: $previewImage, progress: $progress, showingPicker: $showingImagePicker)
-                    }
-                    .buttonStyle(.bordered)
-                    .padding()
                 }
                 SettingsForm()
             }
             .onAppear {
                 medium.position = position
+                refreshImage(previewImage)
             }
-            .navigationTitle("Add Image")
+            .navigationTitle("Add Drawing")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save") {
@@ -79,11 +61,6 @@ struct AddImageView: View {
                         dismiss()
                     }
                     .disabled(saveDisabled)
-                }
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
                 }
             }
             .onChange(of: previewImage, perform: { newValue in
@@ -118,7 +95,7 @@ struct AddImageView: View {
             } header: {
                 Text("General Settings")
             }
-            
+
             if customSize {
                 Section {
                     TextField("Width", value: $width, formatter: formatter, prompt: Text("Size in meters"))
@@ -184,12 +161,14 @@ struct AddImageView: View {
 
 }
 
-struct AddImageView_Previews: PreviewProvider {
+
+
+struct AddDrawingView_Previews: PreviewProvider {
 
     static let envObject = SetupViewModel()
 
     static var previews: some View {
-        AddImageView(position: ContentPosition.top)
+        AddDrawingView(position: .top, previewImage: .constant(nil))
             .environmentObject(envObject)
     }
 }

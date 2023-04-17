@@ -62,7 +62,7 @@ struct SelectMenuView: View {
                 .sheet(isPresented: $showingVideoSheet) {
                     AddVideoView(position: position)
                 }
-                .fullScreenCover(isPresented: $showingDrawing) {
+                .sheet(isPresented: $showingDrawing) {
                     DrawingView()
                 }
             }

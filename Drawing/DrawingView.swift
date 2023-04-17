@@ -11,6 +11,9 @@ import PencilKit
 struct DrawingView: View {
 
     @State private var canvasView = PKCanvasView()
+    @State private var image: UIImage? = UIImage(named: "NCX-Poster")
+    @State private var showingSettingsScreen = false
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         NavigationStack {
@@ -20,10 +23,14 @@ struct DrawingView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Use") {
-
+                        Button("Next") {
+                            image = canvasView.asImage()
+                            showingSettingsScreen.toggle()
                         }
                     }
+                }
+                .navigationDestination(isPresented: $showingSettingsScreen) {
+                    AddDrawingView(position: .top, previewImage: $image)
                 }
         }
 
