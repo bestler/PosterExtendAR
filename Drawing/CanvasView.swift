@@ -11,6 +11,7 @@ import PencilKit
 
 struct CanvasView: UIViewRepresentable {
 
+    @Binding var showingToolPicker: Bool
     @Binding var canvasView: PKCanvasView
     @State var toolPicker = PKToolPicker()
 
@@ -24,7 +25,10 @@ struct CanvasView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        showToolPicker()
+        if showingToolPicker {
+            canvasView.becomeFirstResponder()
+            toolPicker.setVisible(true, forFirstResponder: canvasView)
+        }
     }
 }
 

@@ -63,7 +63,7 @@ struct SelectMenuView: View {
                     AddVideoView(position: position)
                 }
                 .sheet(isPresented: $showingDrawing) {
-                    DrawingView()
+                    DrawingView(position: position)
                 }
             }
         }
