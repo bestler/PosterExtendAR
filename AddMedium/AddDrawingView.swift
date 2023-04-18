@@ -54,6 +54,14 @@ struct AddDrawingView: View {
             }
             .navigationTitle("Add Drawing")
             .toolbar {
+                /*
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel"){
+                        dismiss()
+                        dismiss()
+                    }
+                }
+                 */
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save") {
                         updateSize()

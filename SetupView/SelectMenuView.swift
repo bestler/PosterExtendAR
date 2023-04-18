@@ -64,6 +64,7 @@ struct SelectMenuView: View {
                 }
                 .sheet(isPresented: $showingDrawing) {
                     DrawingView(position: position)
+                        .interactiveDismissDisabled(true)
                 }
             }
         }

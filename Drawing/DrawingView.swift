@@ -20,15 +20,21 @@ struct DrawingView: View {
     var body: some View {
         NavigationStack {
             CanvasView(showingToolPicker: $showingToolPicker, canvasView: $canvasView)
-                .border(.black)
                 .navigationTitle("Draw")
                 .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(Color(uiColor: .systemGroupedBackground), for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Next") {
                             showingToolPicker = false
                             image = canvasView.asImage()
                             showingSettingsScreen.toggle()
+                        }
+                    }
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel"){
+                            dismiss()
                         }
                     }
                 }
