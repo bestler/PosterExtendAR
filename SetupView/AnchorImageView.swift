@@ -35,7 +35,7 @@ struct AnchorImageView: View {
                     .buttonStyle(.borderedProminent)
                     VStack(alignment: .leading) {
                         Text("1. Select here an image (e.g. a poster) that exists in the real world.")
-                        Text("2. Arrange different views around that central image to provide more informations.")
+                        Text("2. Arrange different views/media around your poster.")
                     }
                     .font(.caption)
                     .padding(.trailing)
