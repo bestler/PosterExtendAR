@@ -30,7 +30,7 @@ struct AddAnchorView: View {
     @State private var width: Double = 0.8
     @State private var height: Double = 0.45
     @State private var customSize: Bool = false
-    @State private var choosenSize: PageSize = .DINA4
+    @State private var choosenSize: PageSize = .A4
 
 
     private var saveDisabled: Bool {

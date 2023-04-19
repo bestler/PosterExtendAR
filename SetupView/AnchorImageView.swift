@@ -40,19 +40,11 @@ struct AnchorImageView: View {
                     .font(.caption)
                     .padding(.trailing)
                 }
-                //.padding(40)
             }
         }
         .sheet(isPresented: $showingAnchorImagePicker) {
             AddAnchorView()
         }
-        /*
-         #if DEBUG
-         .onAppear{
-         loadImage(UIImage(named: "London_Tower"))
-         }
-         #endif
-         */
     }
 
     private func loadImage(_ image : UIImage?) {
